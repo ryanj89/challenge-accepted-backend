@@ -1,0 +1,22 @@
+{
+  "name": "challenge-accepted-backend",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ryan Johnson (ryanj89@gmail.com)",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "cors": "^2.8.3",
+    "express": "^4.15.3",
+    "express-jwt": "^5.3.0",
+    "helmet": "^3.6.1",
+    "jwks-rsa": "^1.1.1",
+    "knex": "^0.13.0",
+    "morgan": "^1.8.2",
+    "pg": "^6.2.3"
+  }
+}
