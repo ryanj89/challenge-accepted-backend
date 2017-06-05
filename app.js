@@ -3,7 +3,6 @@ const jwt = require('express-jwt');
 const jwks = require('jwks-rsa');   //  Lib to retrieve RSA signing keys from a JWKS (JSON Web Key Set) endpoint.
 const cors = require('cors');
 const bodyParser = require('body-parser');
-// const path = require('path');
 const logger = require('morgan');
 const helmet = require('helmet');
 

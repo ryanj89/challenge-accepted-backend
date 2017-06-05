@@ -1,13 +1,16 @@
-
+// USER
+// (PK) id: number
+// Email: string
+// Name: string
+// Score: number
+// Created at: date
 exports.up = knex => {
   return knex.schema.createTable('users', t => {
     t.increments();
-    t.string('email').unique();
-    t.string('username').unique();
-    t.integer('points').defaultTo(0);
-    t.integer('challenges_completed').defaultTo(0);
-    t.integer('total_challenges').defaultTo(0);
-    t.integer('challenges_given').defaultTo(0);
+    t.string('email').unique().notNullable();
+    t.string('name').notNullable();
+    t.timestamp('created_at').defaultTo(knex.fn.now());
+    t.integer('score').defaultTo(0);
   });
 };
 
