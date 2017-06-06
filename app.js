@@ -31,58 +31,8 @@ const validateToken = jwt({
 });
 
 //  Routing
-// app.use('/users', require('./routes/users'));
-
-//  Public Challenges
-app.get('/api/challenges/public', (req, res) => {
-  let challenges = [
-    {
-      id: 1,
-      name: 'Challenge #1',
-      description: 'This is my first challenge',
-      created: new Date()
-    },
-    {
-      id: 2,
-      name: 'Challenge #2',
-      description: 'This is my second challenge',
-      created: new Date()
-    },
-    {
-      id: 3,
-      name: 'Challenge #3',
-      description: 'This is my third challenge',
-      created: new Date()
-    },
-  ];
-  res.json(challenges);
-});
-
-//  Private Challenges
-app.get('/api/challenges/private', validateToken, (req, res) => {
-  let challenges = [
-    {
-      id: 1,
-      name: 'Private Challenge #1',
-      description: 'This is my first private challenge',
-      created: new Date()
-    },
-    {
-      id: 2,
-      name: 'Private Challenge #2',
-      description: 'This is my second private challenge',
-      created: new Date()
-    },
-    {
-      id: 3,
-      name: 'Private Challenge #3',
-      description: 'This is my third private challenge',
-      created: new Date()
-    },
-  ];
-  res.json(challenges);
-});
-
+app.use('/api/users', require('./routes/users'));
+app.use('/api/challenges', require('./routes/challenges'));
 
 
 //  Listening Port
