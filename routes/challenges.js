@@ -1,19 +1,14 @@
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const knex = require('../db/knex');
 const jwt = require('express-jwt');
 const jwks = require('jwks-rsa');
 
-const validateToken = jwt({
-  secret: jwks.expressJwtSecret({
-    cache: true,
-    rateLimit: true,
-    jwksRequestsPerMinute: 5,
-    jwksUri: 'https://rynj.auth0.com/.well-known/jwks.json'
-  }),
-  audience: 'challenge-app-api',
-  issuer: 'https://rynj.auth0.com/',
-  algorithms: ['RS256']
+const authenticated = jwt({
+  secret: process.env.SECRET, 
+  credentialsRequired: true, 
+  getToken: fromHeaderOrQuerystring
 });
 
 //  GET ALL CHALLENGES
@@ -36,28 +31,45 @@ router.get('/:id', (req, res) => {
     });
 })
 
-// t.increments();
-// t.integer('creator_id').references('id').inTable('users');
-// t.string('video_url');
-// t.string('category').notNullable();
-// t.integer('points').notNullable();
-// t.boolean('private').defaultTo(false);
-// t.timestamp('expires_at');
-
 //  CREATE CHALLENGE
-router.post('/', (req, res) => {
+router.post('/', authenticated, (req, res) => {
   const challenge = {
     name: req.body.name,
     description: req.body.description,
     creator_id: req.body.creator_id,
     video_url: req.body.video_url,
     category: req.body.category,
-    point: req.body.points,
-    private: req.body.private,
+    points: req.body.points,
+    private: req.body.is_private,
     expires_at: req.body.expires_at
   }
-  console.log(challenge);
+  //  Validate request body
+  if (validChallenge(challenge)) {
+    knex('challenges').insert(challenge).returning('*')
+      .then((results) => {
+        const newChallenge = results[0];
+        console.log('CHALLENGE CREATED!');
+        const userChallenge = { u_id: newChallenge.creator_id, c_id: newChallenge.id };
+        knex('users_challenges').insert(userChallenge).returning('status')
+          .then(result => {
+            console.log('USER_CHALLENGE CREATED!');
+            newChallenge.status = result[0];
+            res.status(201).json(newChallenge);
+          });
+      })
+  } else {
+    res.status(400).send('Invalid Request Body');
+  }
 });
+
+function validChallenge(challenge) {
+  return (typeof challenge.name === 'string' && typeof challenge.description === 'string'
+          && typeof challenge.creator_id === 'number' && typeof challenge.video_url === 'string' 
+          && typeof challenge.category === 'string' && typeof challenge.points === 'number' 
+          && typeof challenge.private === 'boolean'&& challenge.name.trim() !== '' 
+          && challenge.description.trim() !== '' && challenge.video_url.trim() !== '' 
+          && challenge.category.trim() !== '');
+}
 
 // //  GET : Public challenges
 // router.get('/public', (req, res) => {
@@ -70,7 +82,7 @@ router.post('/', (req, res) => {
 
 
 // //  GET : Private Challenges
-// router.get('/private', validateToken, (req, res) => {
+// router.get('/private', authenticated, (req, res) => {
 //   console.log(req.user);
 //   let challenges = [
 //     {
@@ -95,6 +107,13 @@ router.post('/', (req, res) => {
 //   res.json(challenges);
 // });
 
-
+function fromHeaderOrQuerystring (req) {
+  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+      return req.headers.authorization.split(' ')[1];
+  } else if (req.query && req.query.token) {
+    return req.query.token;
+  }
+  return null;
+}
 
 module.exports = router;
