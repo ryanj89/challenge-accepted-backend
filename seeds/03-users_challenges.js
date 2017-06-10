@@ -6,21 +6,26 @@ exports.seed = knex => {
         {
           u_id: 1,
           c_id: 1,
-          status: 'pending'
+          status: 'completed'
         },
         {
           u_id: 1,
           c_id: 2,
+          status: 'pending'
+        },
+        {
+          u_id: 1,
+          c_id: 4,
+          status: 'failed'
+        },
+        {
+          u_id: 2,
+          c_id: 3,
           status: 'completed'
         },
         {
           u_id: 2,
-          c_id: 1,
-          status: 'completed'
-        },
-        {
-          u_id: 2,
-          c_id: 1,
+          c_id: 2,
           status: 'failed'
         },
       ]);

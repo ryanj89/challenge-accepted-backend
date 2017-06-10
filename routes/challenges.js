@@ -4,6 +4,10 @@ const router = express.Router();
 const knex = require('../db/knex');
 const jwt = require('express-jwt');
 const jwks = require('jwks-rsa');
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+const cloudinary = require('cloudinary');
 
 const authenticated = jwt({
   secret: process.env.SECRET, 
@@ -14,12 +18,15 @@ const authenticated = jwt({
 //  GET ALL CHALLENGES
 router.get('/', (req, res) => {
   knex('challenges')
+    .where('private', false)
     .join('users', { 'users.id' : 'challenges.creator_id'})
-    .select('challenges.*', 'users.name as creator')
+    .select('challenges.*', 'users.name as creator', 'users.picture as user_picture', 'users.score as creator_score')
     .then(challenges => {
       res.status(200).json(challenges);
     });
 });
+
+
 
 //  GET CHALLENGE BY ID
 router.get('/:id', (req, res) => {
@@ -64,12 +71,20 @@ router.post('/', authenticated, (req, res) => {
 
 function validChallenge(challenge) {
   return (typeof challenge.name === 'string' && typeof challenge.description === 'string'
-          && typeof challenge.creator_id === 'number' && typeof challenge.video_url === 'string' 
-          && typeof challenge.category === 'string' && typeof challenge.points === 'number' 
-          && typeof challenge.private === 'boolean'&& challenge.name.trim() !== '' 
-          && challenge.description.trim() !== '' && challenge.video_url.trim() !== '' 
+          && typeof challenge.creator_id === 'number' && typeof challenge.category === 'string' 
+          && typeof challenge.points === 'number' && typeof challenge.private === 'boolean'
+          && challenge.name.trim() !== '' && challenge.description.trim() !== ''
           && challenge.category.trim() !== '');
 }
+
+// function uploadFile(req) {
+//   var datauri = new Datauri();
+//   datauri.format('.jpg', req.file.buffer);
+//   cloudinary.uploader.upload(datauri.content, function (result) {
+//     const imgUrl = result.secure_url;
+//     console.log('secure_url: ', imgUrl);
+//   });
+// }
 
 // //  GET : Public challenges
 // router.get('/public', (req, res) => {
