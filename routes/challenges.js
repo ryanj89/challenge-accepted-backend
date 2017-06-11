@@ -4,10 +4,6 @@ const router = express.Router();
 const knex = require('../db/knex');
 const jwt = require('express-jwt');
 const jwks = require('jwks-rsa');
-const multer = require('multer');
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-const cloudinary = require('cloudinary');
 
 const authenticated = jwt({
   secret: process.env.SECRET, 
@@ -20,7 +16,7 @@ router.get('/', (req, res) => {
   knex('challenges')
     .where('private', false)
     .join('users', { 'users.id' : 'challenges.creator_id'})
-    .select('challenges.*', 'users.name as creator', 'users.picture as user_picture', 'users.score as creator_score')
+    .select('challenges.*', 'users.name as creator', 'users.picture as user_picture')
     .then(challenges => {
       res.status(200).json(challenges);
     });
@@ -46,7 +42,6 @@ router.post('/', authenticated, (req, res) => {
     creator_id: req.body.creator_id,
     video_url: req.body.video_url,
     category: req.body.category,
-    points: req.body.points,
     private: req.body.is_private,
     expires_at: req.body.expires_at
   }
@@ -72,19 +67,9 @@ router.post('/', authenticated, (req, res) => {
 function validChallenge(challenge) {
   return (typeof challenge.name === 'string' && typeof challenge.description === 'string'
           && typeof challenge.creator_id === 'number' && typeof challenge.category === 'string' 
-          && typeof challenge.points === 'number' && typeof challenge.private === 'boolean'
-          && challenge.name.trim() !== '' && challenge.description.trim() !== ''
-          && challenge.category.trim() !== '');
+          && typeof challenge.private === 'boolean' && challenge.name.trim() !== '' 
+          && challenge.description.trim() !== '' && challenge.category.trim() !== '');
 }
-
-// function uploadFile(req) {
-//   var datauri = new Datauri();
-//   datauri.format('.jpg', req.file.buffer);
-//   cloudinary.uploader.upload(datauri.content, function (result) {
-//     const imgUrl = result.secure_url;
-//     console.log('secure_url: ', imgUrl);
-//   });
-// }
 
 // //  GET : Public challenges
 // router.get('/public', (req, res) => {
