@@ -4,9 +4,6 @@ const router = express.Router();
 const knex = require('../db/knex');
 const jwt = require('express-jwt');
 const jwks = require('jwks-rsa');
-const multer = require('multer');
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 
 const authenticated = jwt({
   secret: process.env.SECRET, 
@@ -23,7 +20,7 @@ router.get('/', (req, res) => {
   // knex('challenges')
     query.where('challenges.private', false)
     .join('users', { 'users.id' : 'challenges.creator_id'})
-    .select('challenges.*', 'users.name as creator', 'users.picture as user_picture', 'users.score as creator_score')
+    .select('challenges.*', 'users.name as creator', 'users.picture as user_picture')
     .then(challenges => {
       console.log(challenges);
       res.status(200).json(challenges);
@@ -50,7 +47,6 @@ router.post('/', authenticated, (req, res) => {
     creator_id: req.body.creator_id,
     video_url: req.body.video_url,
     category: req.body.category,
-    points: req.body.points,
     private: req.body.is_private,
     expires_at: req.body.expires_at
   }
@@ -76,9 +72,8 @@ router.post('/', authenticated, (req, res) => {
 function validChallenge(challenge) {
   return (typeof challenge.name === 'string' && typeof challenge.description === 'string'
           && typeof challenge.creator_id === 'number' && typeof challenge.category === 'string' 
-          && typeof challenge.points === 'number' && typeof challenge.private === 'boolean'
-          && challenge.name.trim() !== '' && challenge.description.trim() !== ''
-          && challenge.category.trim() !== '');
+          && typeof challenge.private === 'boolean' && challenge.name.trim() !== '' 
+          && challenge.description.trim() !== '' && challenge.category.trim() !== '');
 }
 
 // //  GET : Public challenges
