@@ -7,7 +7,6 @@ const jwks = require('jwks-rsa');
 const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-const cloudinary = require('cloudinary');
 
 const authenticated = jwt({
   secret: process.env.SECRET, 
@@ -17,11 +16,16 @@ const authenticated = jwt({
 
 //  GET ALL CHALLENGES
 router.get('/', (req, res) => {
-  knex('challenges')
-    .where('private', false)
+  let query = knex('challenges');
+  if (req.query.name) {
+    query = query.where('challenges.name', req.query.name)
+  }
+  // knex('challenges')
+    query.where('challenges.private', false)
     .join('users', { 'users.id' : 'challenges.creator_id'})
     .select('challenges.*', 'users.name as creator', 'users.picture as user_picture', 'users.score as creator_score')
     .then(challenges => {
+      console.log(challenges);
       res.status(200).json(challenges);
     });
 });
@@ -76,15 +80,6 @@ function validChallenge(challenge) {
           && challenge.name.trim() !== '' && challenge.description.trim() !== ''
           && challenge.category.trim() !== '');
 }
-
-// function uploadFile(req) {
-//   var datauri = new Datauri();
-//   datauri.format('.jpg', req.file.buffer);
-//   cloudinary.uploader.upload(datauri.content, function (result) {
-//     const imgUrl = result.secure_url;
-//     console.log('secure_url: ', imgUrl);
-//   });
-// }
 
 // //  GET : Public challenges
 // router.get('/public', (req, res) => {
