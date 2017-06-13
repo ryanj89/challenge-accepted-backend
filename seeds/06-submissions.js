@@ -5,7 +5,7 @@ exports.seed = knex => {
       return knex('submissions').insert([
         {
           u_id: 1,
-          c_id: 3,
+          c_id: 2,
           submission: 'https://youtu.be/5c1cNMnvTsw',
           details: "This is a backflip",
         }
