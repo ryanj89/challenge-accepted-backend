@@ -55,7 +55,9 @@ router.get('/:id/submissions', (req, res) => {
   knex('submissions')
     .where('c_id', id)
     .join('users', { 'users.id' : 'submissions.u_id' })
+    .select('submissions.*', 'users.name', 'users.picture')
     .then(results => {
+      console.log(results);
       res.status(200).json(results);
     })
 });
