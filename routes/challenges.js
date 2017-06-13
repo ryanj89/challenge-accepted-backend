@@ -22,22 +22,43 @@ router.get('/', (req, res) => {
     .join('users', { 'users.id' : 'challenges.creator_id'})
     .select('challenges.*', 'users.name as creator', 'users.picture as user_picture')
     .then(challenges => {
-      console.log(challenges);
+      // console.log(challenges);
       res.status(200).json(challenges);
     });
 });
-
-
 
 //  GET CHALLENGE BY ID
 router.get('/:id', (req, res) => {
   const id = req.params.id;
   knex('challenges')
-    .where('id', id)
+    .where('challenges.id', id)
+    .first()
+    .join('users', { 'users.id' : 'challenges.creator_id'})
+    .select('challenges.*', 'users.name as creator', 'users.picture as user_picture')
     .then(challenges => {
       res.status(200).json(challenges);
     });
 })
+
+router.get('/:id/users', (req, res) => {
+  const id = req.params.id;
+  knex('users_challenges')
+    .where('c_id', id)
+    .join('users', { 'users.id' : 'users_challenges.u_id' })
+    .then(results => {
+      res.status(200).json(results);
+    })
+});
+
+router.get('/:id/submissions', (req, res) => {
+  const id = req.params.id;
+  knex('submissions')
+    .where('c_id', id)
+    .join('users', { 'users.id' : 'submissions.u_id' })
+    .then(results => {
+      res.status(200).json(results);
+    })
+});
 
 //  CREATE CHALLENGE
 router.post('/', authenticated, (req, res) => {

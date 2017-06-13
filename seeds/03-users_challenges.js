@@ -16,7 +16,7 @@ exports.seed = knex => {
         {
           u_id: 1,
           c_id: 4,
-          status: 'failed'
+          status: 'pending'
         },
         {
           u_id: 2,
@@ -26,7 +26,7 @@ exports.seed = knex => {
         {
           u_id: 2,
           c_id: 2,
-          status: 'failed'
+          status: 'pending'
         },
       ]);
     });
