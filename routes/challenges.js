@@ -22,7 +22,6 @@ router.get('/', (req, res) => {
     .join('users', { 'users.id' : 'challenges.creator_id'})
     .select('challenges.*', 'users.name as creator', 'users.picture as user_picture')
     .then(challenges => {
-      // console.log(challenges);
       res.status(200).json(challenges);
     });
 });
@@ -57,9 +56,18 @@ router.get('/:id/submissions', (req, res) => {
     .join('users', { 'users.id' : 'submissions.u_id' })
     .select('submissions.*', 'users.name', 'users.picture')
     .then(results => {
-      console.log(results);
       res.status(200).json(results);
     })
+});
+
+router.get('/:id/messages', (req, res) => {
+  knex('messages')
+    .where('room', req.params.id)
+    .join('users', { 'users.id' : 'messages.user' })
+    .select('messages.*', 'users.name')
+    .then(results => {
+      res.status(200).json(results);
+    });
 });
 
 //  CREATE CHALLENGE

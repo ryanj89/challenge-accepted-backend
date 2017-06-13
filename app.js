@@ -1,4 +1,5 @@
 require('dotenv').config();
+const knex = require('./db/knex');
 const express = require('express');
 const socketio = require('socket.io');
 const jwt = require('express-jwt');
@@ -57,8 +58,9 @@ io.on('connection', (client) => {
   })
 
   client.on('send', data => {
-    console.log(data);
-    client.to(data.room).emit('chat', data);
+    knex('messages').insert(data).then(results => {
+      client.to(data.room).emit('chat', data);
+    })
   });
 
   client.on('leave', (data) => {

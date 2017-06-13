@@ -3,18 +3,21 @@ exports.seed = knex => {
     .then(() => {
       return knex('messages').insert([
         {
-          u_id: 1,
-          c_id: 2,
+          user: 1,
+          name: 'Ryan Johnson',
+          room: 2,
           message: 'Hey there!'
         },
         {
-          u_id: 2,
-          c_id: 2,
+          user: 2,
+          name: 'Lindsay Bendell',
+          room: 2,
           message: "What's up?"
         },
         {
-          u_id: 1,
-          c_id: 2,
+          user: 1,
+          name: 'Ryan Johnson',
+          room: 2,
           message: 'Awesome challenge!'
         },
       ]);
