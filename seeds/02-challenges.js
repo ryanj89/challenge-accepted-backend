@@ -6,7 +6,8 @@ exports.seed = knex => {
           name: 'Ryan\'s Private Challenge',
           description: 'This is a description for a challenge. It should describe what the challenge is and any requirements to fulfill the challenge',
           creator_id: 1,
-          video_url: 'https://res.cloudinary.com/ryanj89/image/upload/v1496983819/opbwqxegu5wfu8pqevio.jpg',
+          public_id: 'opbwqxegu5wfu8pqevio',
+          resource_type: 'image',
           category: 'outdoors',
           private: true,
           expires_at: new Date(2017, 6, 9)
@@ -15,7 +16,8 @@ exports.seed = knex => {
           name: 'Ryan\'s Public Challenge',
           description: 'This is a description for a challenge. It should describe what the challenge is and any requirements to fulfill the challenge',
           creator_id: 1,
-          video_url: 'http://blog.iheartraves.com/wp-content/uploads/2015/06/bassnectar.jpg',
+          public_id: 'bassnectar_hninwx',
+          resource_type: 'image',
           category: 'music',
           private: false,
           expires_at: new Date(2017, 6, 10)
@@ -24,7 +26,8 @@ exports.seed = knex => {
           name: 'Lindsay\'s Public Challenge',
           description: 'This is a description for another challenge.',
           creator_id: 2,
-          video_url: 'https://backroads-web.s3.amazonaws.com/images/search/thumbnail/french-italian-alps-walking-hiking-tour.jpg',
+          public_id: 'french-italian-alps-walking-hiking-tour_vxrrwv',
+          resource_type: 'image',
           category: 'outdoors',
           private: false,
           expires_at: new Date(2017, 6, 15)
@@ -33,7 +36,8 @@ exports.seed = knex => {
           name: 'Lindsay\'s Private Challenge',
           description: 'This is a description for another challenge.',
           creator_id: 2,
-          video_url: 'https://backroads-web.s3.amazonaws.com/images/search/thumbnail/french-italian-alps-walking-hiking-tour.jpg',
+          public_id: 'french-italian-alps-walking-hiking-tour_vxrrwv',
+          resource_type: 'image',
           category: 'outdoors',
           private: true,
           expires_at: new Date(2017, 6, 9)

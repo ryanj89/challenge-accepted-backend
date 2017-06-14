@@ -4,7 +4,8 @@ exports.up = knex => {
     t.string('name').notNullable();
     t.text('description').notNullable();
     t.integer('creator_id').references('id').inTable('users');
-    t.string('video_url');
+    t.string('public_id');
+    t.string('resource_type');
     t.string('category').notNullable();
     t.integer('score').notNullable().defaultTo(0);
     t.timestamps(true, true);

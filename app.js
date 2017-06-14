@@ -93,22 +93,41 @@ router.get('/rooms/:id', (req, res) => {
   }
 });
 
+router.get('/test', (req, res) => {
+  // knex('challenges')
+  //   .where('challenges.private', false)
+  //   .join('users', { 'users.id' : 'challenges.creator_id'})
+  //   .join('users_challenges', {'challenges.id': 'users_challenges.c_id'})
+  //   .select(knex.raw('count(users_challenges.u_id) as competitor_count, challenges.*, users.name as creator, users.picture as user_picture'))
+  //   .groupBy('challenges.id', 'users.name', 'users.picture')
+  //   .then(results => {
+  //     res.status(200).json(results);
+  //   })
+
+
+
+  // let query = knex('challenges');
+  // // if (req.query.name) {
+  // //   query = query.where('challenges.name', req.query.name)
+  // // }
+  // // knex('challenges')
+  // query.where('challenges.private', false)
+  //   .join('users', { 'users.id' : 'challenges.creator_id'})
+  //   .join('users_challenges', { 'challenges.id' : 'users_challenges.c_id'})
+  //   .select('users_challenges.*', 'challenges.*', 'users.name as creator', 'users.picture as user_picture')
+  //   .then(challenges => {
+  //     res.status(200).json(challenges);
+  //   });
+});
+
 
 router.use('/api/users', require('./routes/users'));
 router.use('/api/challenges', require('./routes/challenges'));
 router.use('/api/users_challenges', require('./routes/users_challenges'));
-router.use('/api/submissions', require('./routes/submissions'));
+router.use('/api/submissions', authenticated, require('./routes/submissions'));
 router.use('/api/me', authenticated, require('./routes/me'));
 
 app.use('/', router);
-// app.use('/api/users', require('./routes/users'));
-// app.use('/api/challenges', require('./routes/challenges'));
-// app.use('/api/me', authenticated, require('./routes/me'));
-
-//  Listening Port
-// app.listen(PORT, () => {
-//   console.log(`Listening on port ${PORT}`);
-// });
 
 function fromHeaderOrQuerystring (req) {
   if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {

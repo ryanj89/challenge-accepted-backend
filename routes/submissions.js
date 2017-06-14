@@ -27,6 +27,7 @@ router.post('/', (req, res) => {
     u_id: req.body.u_id,
     c_id: req.body.c_id,
     submission: req.body.submission,
+    resource_type: req.body.resource_type,
     details: req.body.details
   }
   knex('submissions')
@@ -44,20 +45,58 @@ router.post('/', (req, res) => {
     })
 })
 
-//  Update Submission score and challenge score
 router.patch('/:id', (req, res) => {
-  knex('submissions')
-    .where('id', req.params.id)
-    .increment('score', 1)
-    .then(results => {
-      knex('challenges')
-        .where('id', req.body.challenge)
-        .increment('score', 1)
-        .then(results => {
-          res.send(204);
-        })
-    })
-
+  let updatedScore = 0;
+  if (req.body.prevVoteId) {
+    knex('submissions')
+      .where('id', req.params.id)
+      .decrement('score', 1)
+      .returning('score')
+      .then(score => {
+        updatedScore = score[0];
+        // console.log(updatedScore);
+        knex('challenges')
+          .where('id', req.body.challenge)
+          .decrement('score', 1)
+          .then(results => {
+            // res.status(200).json(updatedScore);
+            //  Update users_challenges voted
+            knex('users_challenges')
+              .where({
+                c_id: req.body.challenge,
+                u_id: req.body.user_id })
+              .update({ voted: null })
+              .then(result => {
+                console.log(updatedScore);
+                res.status(200).json(updatedScore);
+              })
+          })
+      })
+  } else {
+    //  Update Submission score
+    knex('submissions')
+      .where('id', req.params.id)
+      .increment('score', 1)
+      .returning('score')
+      .then(score => {
+        updatedScore = score[0];
+        //  Update challenge score
+        knex('challenges')
+          .where('id', req.body.challenge)
+          .increment('score', 1)
+          .then(results => {
+            //  Update users_challenges voted
+            knex('users_challenges')
+              .where({
+                c_id: req.body.challenge,
+                u_id: req.body.user_id })
+              .update({ voted: req.params.id })
+              .then(result => {
+                res.status(200).json(updatedScore);
+              })
+          })
+      })
+  }
 })
 
 module.exports = router;

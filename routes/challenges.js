@@ -13,17 +13,26 @@ const authenticated = jwt({
 
 //  GET ALL CHALLENGES
 router.get('/', (req, res) => {
-  let query = knex('challenges');
-  if (req.query.name) {
-    query = query.where('challenges.name', req.query.name)
-  }
-  // knex('challenges')
-    query.where('challenges.private', false)
+  knex('challenges')
+    .where('challenges.private', false)
     .join('users', { 'users.id' : 'challenges.creator_id'})
-    .select('challenges.*', 'users.name as creator', 'users.picture as user_picture')
-    .then(challenges => {
-      res.status(200).json(challenges);
-    });
+    .join('users_challenges', {'challenges.id': 'users_challenges.c_id'})
+    .select(knex.raw('count(users_challenges.u_id) as competitor_count, challenges.*, users.name as creator, users.picture as user_picture'))
+    .groupBy('challenges.id', 'users.name', 'users.picture')
+    .then(results => {
+      res.status(200).json(results);
+    })
+  // let query = knex('challenges');
+  // if (req.query.name) {
+  //   query = query.where('challenges.name', req.query.name)
+  // }
+  // // knex('challenges')
+  // query.where('challenges.private', false)
+  //   .join('users', { 'users.id' : 'challenges.creator_id'})
+  //   .select('challenges.*', 'users.name as creator', 'users.picture as user_picture')
+  //   .then(challenges => {
+  //     res.status(200).json(challenges);
+  //   });
 });
 
 //  GET CHALLENGE BY ID
@@ -76,7 +85,8 @@ router.post('/', authenticated, (req, res) => {
     name: req.body.name,
     description: req.body.description,
     creator_id: req.body.creator_id,
-    video_url: req.body.video_url,
+    public_id: req.body.public_id,
+    resource_type: req.body.resource_type,
     category: req.body.category,
     private: req.body.is_private,
     expires_at: req.body.expires_at

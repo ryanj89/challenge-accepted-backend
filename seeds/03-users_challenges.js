@@ -6,38 +6,32 @@ exports.seed = knex => {
         {
           u_id: 1,
           c_id: 1,
-          voted: false,
+          voted: null,
           status: 'pending'
         },
         {
           u_id: 1,
           c_id: 2,
-          voted: false,
+          voted: null,
           status: 'completed'
         },
         {
           u_id: 1,
-          c_id: 3,
-          voted: false,
-          status: 'pending'
-        },
-        {
-          u_id: 1,
           c_id: 4,
-          voted: false,
+          voted: null,
           status: 'pending'
         },
         {
           u_id: 2,
           c_id: 3,
-          voted: false,
+          voted: null,
           status: 'pending'
         },
         {
           u_id: 2,
           c_id: 2,
-          voted: false,
-          status: 'pending'
+          voted: null,
+          status: 'completed'
         },
       ]);
     });
