@@ -34,7 +34,6 @@ router.get('/challenges', (req, res) => {
     .join('users as creator', { 'creator.id': 'challenges.creator_id' })
     .select('creator.*', 'challenges.*', 'users_challenges.status')
     .then(results => {
-      console.log(results)
       res.json(results);
     });
 });

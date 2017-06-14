@@ -9,6 +9,7 @@ exports.seed = knex => {
           submission: 'bassnectar_hninwx',
           resource_type: 'image',
           details: "This is a backflip",
+          score: 3
         },
         {
           u_id: 1,
@@ -16,6 +17,7 @@ exports.seed = knex => {
           submission: 'bassnectar_hninwx',
           resource_type: 'image',
           details: "Another One",
+          score: 4
         }
       ]);
     });
