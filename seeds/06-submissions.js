@@ -8,15 +8,15 @@ exports.seed = knex => {
           c_id: 2,
           submission: 'bassnectar_hninwx',
           resource_type: 'image',
-          details: "This is a backflip",
+          details: "Be jealous....",
           score: 3
         },
         {
           u_id: 1,
           c_id: 2,
-          submission: 'bassnectar_hninwx',
+          submission: 'jwjbo3gdsoayz5ixscpk',
           resource_type: 'image',
-          details: "Another One",
+          details: "Here I am!",
           score: 4
         }
       ]);
