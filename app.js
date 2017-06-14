@@ -93,6 +93,7 @@ router.get('/rooms/:id', (req, res) => {
   }
 });
 
+
 router.use('/api/users', require('./routes/users'));
 router.use('/api/challenges', require('./routes/challenges'));
 router.use('/api/users_challenges', require('./routes/users_challenges'));

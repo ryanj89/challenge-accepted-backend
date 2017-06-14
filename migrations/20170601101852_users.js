@@ -6,8 +6,6 @@ exports.up = knex => {
     t.string('picture');
     t.string('role').notNullable().defaultTo('user');
     t.timestamp('created_at').defaultTo(knex.fn.now());
-    t.integer('challenger_score').defaultTo(0);
-    t.integer('submission_score').defaultTo(0);
   });
 };
 

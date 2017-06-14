@@ -1,7 +1,3 @@
-// USER_CHALLENGE (many to many)
-// (FK) User id: number
-// (FK) Challenge id: number
-// Status: string (pending, completed, failed)
 exports.up = knex => {
   return knex.schema.createTable('users_challenges', t => {
     t.integer('u_id').references('id').inTable('users').onDelete('CASCADE');

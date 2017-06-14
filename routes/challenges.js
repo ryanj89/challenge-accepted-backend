@@ -107,41 +107,6 @@ function validChallenge(challenge) {
           && challenge.description.trim() !== '' && challenge.category.trim() !== '');
 }
 
-// //  GET : Public challenges
-// router.get('/public', (req, res) => {
-//   knex('challenges')
-//     .where('private', false)
-//     .join('users', { 'users.id' : 'challenges.creator_id'})
-//     .select('challenges.*', 'users.name as creator')
-//     .then(challenges => res.status(200).json(challenges));
-// });
-
-
-// //  GET : Private Challenges
-// router.get('/private', authenticated, (req, res) => {
-//   console.log(req.user);
-//   let challenges = [
-//     {
-//       id: 1,
-//       name: 'Private Challenge #1',
-//       description: 'This is my first private challenge',
-//       created: new Date()
-//     },
-//     {
-//       id: 2,
-//       name: 'Private Challenge #2',
-//       description: 'This is my second private challenge',
-//       created: new Date()
-//     },
-//     {
-//       id: 3,
-//       name: 'Private Challenge #3',
-//       description: 'This is my third private challenge',
-//       created: new Date()
-//     },
-//   ];
-//   res.json(challenges);
-// });
 
 function fromHeaderOrQuerystring (req) {
   if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {

@@ -44,4 +44,20 @@ router.post('/', (req, res) => {
     })
 })
 
+//  Update Submission score and challenge score
+router.patch('/:id', (req, res) => {
+  knex('submissions')
+    .where('id', req.params.id)
+    .increment('score', 1)
+    .then(results => {
+      knex('challenges')
+        .where('id', req.body.challenge)
+        .increment('score', 1)
+        .then(results => {
+          res.send(204);
+        })
+    })
+
+})
+
 module.exports = router;
