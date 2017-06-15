@@ -15,7 +15,7 @@ exports.seed = knex => {
           name: 'Go on a bike ride through downtown',
           description: 'Ride through downtown on a bike, how fast can you go?',
           creator_id: 2,
-          challenge_img: 'https://http://res.cloudinary.com/ryanj89/image/upload/v1497567236/Bike-Lake_z1yf5e.jpg',
+          challenge_img: 'https://res.cloudinary.com/ryanj89/image/upload/v1497567236/Bike-Lake_z1yf5e.jpg',
           category: 'outdoors',
           private: false,
           expires_at: new Date(2017, 6, 15)
