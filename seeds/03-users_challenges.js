@@ -4,7 +4,7 @@ exports.seed = knex => {
     .then(() => {
       return knex('users_challenges').insert([
         {
-          u_id: 1,
+          u_id: 2,
           c_id: 1,
           voted: null,
           status: 'pending'
