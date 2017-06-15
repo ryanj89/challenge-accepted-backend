@@ -74,8 +74,7 @@ router.post('/', authenticated, (req, res) => {
     name: req.body.name,
     description: req.body.description,
     creator_id: req.body.creator_id,
-    public_id: req.body.public_id,
-    resource_type: req.body.resource_type,
+    challenge_img: req.body.challenge_img,
     category: req.body.category,
     private: req.body.is_private,
   }

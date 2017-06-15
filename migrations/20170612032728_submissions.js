@@ -4,7 +4,6 @@ exports.up = knex => {
     t.integer('u_id').references('id').inTable('users');
     t.integer('c_id').references('id').inTable('challenges');
     t.string('submission').notNullable();
-    t.string('resource_type').notNullable();
     t.text('details').nullable();
     t.timestamp('created_at').defaultTo(knex.fn.now());
     t.integer('score').notNullable().defaultTo(0);

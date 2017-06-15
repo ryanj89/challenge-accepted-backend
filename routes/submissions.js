@@ -27,7 +27,6 @@ router.post('/', (req, res) => {
     u_id: req.body.u_id,
     c_id: req.body.c_id,
     submission: req.body.submission,
-    resource_type: req.body.resource_type,
     details: req.body.details
   }
   knex('submissions')
