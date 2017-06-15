@@ -10,7 +10,7 @@ exports.up = knex => {
     t.integer('score').notNullable().defaultTo(0);
     t.timestamps(true, true);
     t.boolean('private').defaultTo(false);
-    t.timestamp('expires_at');
+    t.timestamp('expires_at').defaultTo(knex.fn.now());
   });
 };
 

@@ -22,17 +22,6 @@ router.get('/', (req, res) => {
     .then(results => {
       res.status(200).json(results);
     })
-  // let query = knex('challenges');
-  // if (req.query.name) {
-  //   query = query.where('challenges.name', req.query.name)
-  // }
-  // // knex('challenges')
-  // query.where('challenges.private', false)
-  //   .join('users', { 'users.id' : 'challenges.creator_id'})
-  //   .select('challenges.*', 'users.name as creator', 'users.picture as user_picture')
-  //   .then(challenges => {
-  //     res.status(200).json(challenges);
-  //   });
 });
 
 //  GET CHALLENGE BY ID
@@ -89,7 +78,6 @@ router.post('/', authenticated, (req, res) => {
     resource_type: req.body.resource_type,
     category: req.body.category,
     private: req.body.is_private,
-    expires_at: req.body.expires_at
   }
   //  Validate request body
   if (validChallenge(challenge)) {
