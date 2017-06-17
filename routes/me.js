@@ -8,18 +8,24 @@ router.get('/', (req, res) => {
   let response = {};
   knex('users')
     .where('email', req.user.email)
-    .join('challenges', { 'challenges.creator_id': 'users.id' })
-    .select(knex.raw('sum(challenges.score) as challenger_score, users.*'))
-    .groupBy('users.id')
     .first()
     .then(results => {
       response = results;
       knex('submissions')
         .where('u_id', results.id)
-        .sum('submissions.score as submission_score')
+        .join('challenges', { 'challenges.creator_id': results.id })
+        .select(knex.raw('sum(challenges.score) as challenger_score, sum(submissions.score) as submission_score'))
         .first()
         .then(data => {
+          response.challenger_score = data.challenger_score;
           response.submission_score = data.submission_score;
+
+          if (response.challenger_score === null) {
+            response.challenger_score = 0;
+          } 
+          if (response.submission_score === null) {
+            response.submission_score = 0;
+          }
           res.json(response);
         })
     });

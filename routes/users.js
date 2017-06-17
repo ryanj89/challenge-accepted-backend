@@ -15,34 +15,47 @@ router.get('/', (req, res) => {
   } else {
   let response = {};
   knex('users')
-    // .where('email', req.user.email)
     .where('email', req.query.email)
-    .join('users_challenges', { 'users_challenges.u_id': 'users.id' })
-    .join('challenges', { 'challenges.id': 'users_challenges.c_id' })
-    .select(knex.raw('sum(challenges.score) as challenger_score, users.*'))
-    .groupBy('users.id')
-    .first()
     .then(results => {
-      response = results;
-      knex('submissions')
-        .where('u_id', results.id)
-        .sum('submissions.score as submission_score')
-        .first()
-        .then(data => {
-          response.submission_score = data.submission_score;
-          res.json(response);
-        })
+      res.json(results);
     });
   }
+  // if (!req.query.email) {
+  //   db.getAllUsers()
+  //     .then((result) => {
+  //       res.status(200).send(result);
+  //     });
+  // } else {
+  // let response = {};
+  // knex('users')
+  //   // .where('email', req.user.email)
+  //   .where('email', req.query.email)
+  //   .join('users_challenges', { 'users_challenges.u_id': 'users.id' })
+  //   .join('challenges', { 'challenges.id': 'users_challenges.c_id' })
+  //   .select(knex.raw('sum(challenges.score) as challenger_score, users.*'))
+  //   .groupBy('users.id')
+  //   .first()
+  //   .then(results => {
+  //     response = results;
+  //     knex('submissions')
+  //       .where('u_id', results.id)
+  //       .sum('submissions.score as submission_score')
+  //       .first()
+  //       .then(data => {
+  //         response.submission_score = data.submission_score;
+  //         res.json(response);
+  //       })
+  //   });
+  // }
 });
 
 //  GET USER BY ID
 router.get('/:id', (req, res) => {
-  // const id = req.params.id;
-  // db.getUserById(id)
-  //   .then((results) => {
-  //     res.status(200).json(results);
-  //   });
+  const id = req.params.id;
+  db.getUserById(id)
+    .then((results) => {
+      res.status(200).json(results);
+    });
 });
 
 //  CREATE USER
